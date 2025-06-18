@@ -30,7 +30,7 @@ A comprehensive interactive dashboard for analyzing global economic indicators f
 3. Create and activate virtual environment:
    ```bash
    python -m venv venv
-   source venv/bin/activate  # On Windows: venv\Scripts\activate
+   source venv/bin/activate  # On Windows: venv\\Scripts\\activate
    ```
 4. Install dependencies:
    ```bash
@@ -59,9 +59,6 @@ Countries are filtered to exclude regional aggregates and focus on individual na
 ## License
 
 This project is open source and available under the MIT License.
-
-
-
 
 ## Live Demo
 
