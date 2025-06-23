@@ -1,85 +1,38 @@
-# Economic Data Dashboard
+# 経済データダッシュボード - モダン版
 
-A comprehensive interactive dashboard for analyzing global economic indicators from World Bank Open Data.
+## 概要
+世界銀行オープンデータを活用した、モダンでインタラクティブな経済データダッシュボードです。
 
-## Features
+## 特徴
+- 📊 インタラクティブなチャート表示
+- 🌙 ダークモード対応
+- 📱 レスポンシブデザイン
+- 🔄 自動データ更新（毎日15:00 JST）
+- 🎨 モダンなUI/UX
 
-- **Interactive Visualizations**: GDP trends, population growth, and correlation analysis
-- **Comprehensive Data**: 217 countries analyzed from 2015-2024
-- **Real-time Data**: Sourced from World Bank Open Data API
-- **Responsive Design**: Works on desktop and mobile devices
+## 表示データ
+- GDP (current US$)
+- 人口
+- インフレ率
+- 失業率
+- 外国直接投資
+- 外貨準備高
 
-## Data Sources
+## 対象国
+USA, CHN, JPN, DEU, GBR, FRA, IND, ITA, BRA, CAN
 
-- **World Bank Open Data**: Primary source for economic indicators
-- **Key Indicators**: GDP (current US$) and Population totals
-- **Coverage**: 217 countries, 2015-2024 period
+## 技術スタック
+- HTML5 + CSS3 + JavaScript
+- Chart.js (データ可視化)
+- Tailwind CSS (スタイリング)
+- GitHub Actions (自動更新)
+- GitHub Pages (ホスティング)
 
-## Technology Stack
+## 最終更新
+2025年06月23日 09:24:26 JST
 
-- **Backend**: Python Flask
-- **Data Processing**: Pandas, World Bank Data API
-- **Visualizations**: Plotly
-- **Frontend**: HTML, CSS, JavaScript
-- **Deployment**: GitHub Pages
+## データソース
+[World Bank Open Data](https://data.worldbank.org/)
 
-## Local Development
-
-1. Clone the repository
-2. Navigate to the project directory
-3. Create and activate virtual environment:
-   ```bash
-   python -m venv venv
-   source venv/bin/activate  # On Windows: venv\\Scripts\\activate
-   ```
-4. Install dependencies:
-   ```bash
-   pip install -r requirements.txt
-   ```
-5. Run the application:
-   ```bash
-   python src/main.py
-   ```
-6. Open http://localhost:5000 in your browser
-
-## Data Processing
-
-The dashboard extracts data using the World Bank API, focusing on:
-- GDP (current US$) - NY.GDP.MKTP.CD
-- Population, total - SP.POP.TOTL
-
-Countries are filtered to exclude regional aggregates and focus on individual nation-states.
-
-## Visualizations
-
-1. **GDP Trends Over Time**: Line chart showing GDP evolution for major economies
-2. **Population Growth**: Population trends for selected countries
-3. **GDP vs Population Correlation**: Scatter plot with logarithmic scaling
-
-## License
-
-This project is open source and available under the MIT License.
-
-## Live Demo
-
-Access the live dashboard here: [Economic Data Dashboard](https://tomoto0.github.io/economic-data-dashboard/)
-
-### Screenshot
-
-![Economic Data Dashboard Screenshot](economic_data_dashboard_screenshot.png)
-
-## Architecture Diagram
-
-```mermaid
-graph TD
-    A[User] --> B(Web Browser)
-    B --> C{GitHub Pages}
-    C --> D[HTML/CSS/JS]
-    D --> E[Plotly Visualizations]
-    E --> F[economic_data.csv]
-    F --> G[World Bank Open Data API]
-    G --> H[Python Scripts]
-    H --> F
-```
-
-
+## ライセンス
+MIT License

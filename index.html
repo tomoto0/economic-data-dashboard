@@ -1,114 +1,45 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ja">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Economic Data Dashboard</title>
+    <title>経済データダッシュボード</title>
+    <meta http-equiv="refresh" content="0; url=modern-dashboard-simple.html">
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
             margin: 0;
-            padding: 0;
-            background: linear-gradient(to right, #6a11cb 0%, #2575fc 100%);
-            color: #fff;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
         }
-        .container {
-            width: 90%;
-            margin: 20px auto;
-            background-color: rgba(255, 255, 255, 0.9);
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            color: #333;
-        }
-        h1, h2 {
-            color: #0056b3;
+        .loading {
             text-align: center;
         }
-        .visualization-section {
-            margin-bottom: 30px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            padding: 15px;
-            background-color: #f9f9f9;
+        .spinner {
+            border: 4px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top: 4px solid white;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
         }
-        .visualization-section iframe {
-            width: 100%;
-            height: 500px;
-            border: none;
-        }
-        .footer {
-            text-align: center;
-            margin-top: 30px;
-            padding-top: 20px;
-            border-top: 1px solid #ccc;
-            color: #eee;
-        }
-        .footer a {
-            color: #fff;
-            text-decoration: none;
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Economic Data Dashboard</h1>
-        <p>This dashboard presents key economic indicators for various countries, sourced from the World Bank Open Data. It aims to provide insights into global economic trends. (Updated: 2025-06-19)</p>
-
-        <div class="visualization-section">
-            <h2>GDP (current US$) Trends</h2>
-            <iframe src="gdp_trend.html"></iframe>
-        </div>
-
-        <div class="visualization-section">
-            <h2>Population Trends</h2>
-            <iframe src="population_trend.html"></iframe>
-        </div>
-
-        <div class="visualization-section">
-            <h2>GDP vs Population Scatter Plot</h2>
-            <iframe src="gdp_population_scatter.html"></iframe>
-        </div>
-
-        <div class="visualization-section">
-            <h2>Inflation (annual %) Trends</h2>
-            <iframe src="inflation_trend.html"></iframe>
-        </div>
-
-        <div class="visualization-section">
-            <h2>Unemployment (total labor force %) Trends</h2>
-            <iframe src="unemployment_trend.html"></iframe>
-        </div>
-
-        <div class="visualization-section">
-            <h2>Foreign Direct Investment (net inflows) Trends</h2>
-            <iframe src="fdi_trend.html"></iframe>
-        </div>
-
-        <div class="visualization-section">
-            <h2>Total Reserves (includes gold) Trends</h2>
-            <iframe src="reserves_trend.html"></iframe>
-        </div>
-
-        <h2>Data Source</h2>
-        <p>All data presented in this dashboard is obtained from the <a href="https://data.worldbank.org/" target="_blank">World Bank Open Data</a>. The specific indicators used are:</p>
-        <ul>
-            <li>GDP (current US$) - NY.GDP.MKTP.CD</li>
-            <li>Population, total - SP.POP.TOTL</li>
-            <li>GDP growth (annual %) - NY.GDP.MKTP.KD.ZG</li>
-            <li>Inflation, consumer prices (annual %) - FP.CPI.TOTL.ZG</li>
-            <li>Unemployment, total (% of total labor force) - SL.UEM.TOTL.ZS</li>
-            <li>Foreign direct investment, net inflows (BoP, current US$) - BX.KLT.DINV.CD.WD</li>
-            <li>Total reserves (includes gold, current US$) - FI.RES.TOTL.CD</li>
-        </ul>
-    </div>
-
-    <div class="footer">
-        <p>&copy; 2025 Economic Data Dashboard. All rights reserved.</p>
-        <p>Built with Python, Pandas, Plotly, and Flask.</p>
-        <p><a href="https://github.com/tomoto0/economic-data-dashboard" target="_blank">GitHub Repository</a></p>
+    <div class="loading">
+        <div class="spinner"></div>
+        <h2>経済データダッシュボードを読み込み中...</h2>
+        <p>自動的にリダイレクトされない場合は、<a href="modern-dashboard-simple.html" style="color: #fff;">こちら</a>をクリックしてください。</p>
     </div>
 </body>
 </html>
-
 
