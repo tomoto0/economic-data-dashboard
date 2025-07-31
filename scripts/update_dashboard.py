@@ -95,10 +95,15 @@ def update_dashboard():
             print(f"Major 5 countries total population: {total_pop/1e9:.1f}B")
     
     # README.mdの更新
+    # Gemini APIで要約を生成
+    summary_text = generate_summary(df)
+
     readme_content = f"""# 経済データダッシュボード - モダン版
 
 ## 概要
 世界銀行オープンデータを活用した、モダンでインタラクティブな経済データダッシュボードです。
+
+{summary_text}
 
 ## 特徴
 - 📊 インタラクティブなチャート表示
@@ -126,7 +131,7 @@ USA, CHN, JPN, DEU, GBR, FRA, IND, ITA, BRA, CAN
 - GitHub Pages (ホスティング)
 
 ## 最終更新
-{datetime.now().strftime('%Y年%m月%d日 %H:%M:%S JST')}
+{datetime.now().strftime("%Y年%m月%d日 %H:%M:%S JST")}
 
 ## データソース
 [World Bank Open Data](https://data.worldbank.org/)
@@ -135,7 +140,7 @@ USA, CHN, JPN, DEU, GBR, FRA, IND, ITA, BRA, CAN
 MIT License
 """
     
-    with open('README.md', 'w', encoding='utf-8') as f:
+    with open("README.md", "w", encoding="utf-8") as f:
         f.write(readme_content)
     
     print("README.md updated")
@@ -143,4 +148,24 @@ MIT License
 
 if __name__ == "__main__":
     update_dashboard()
+
+
+
+import google.generativeai as genai
+import os
+
+genai.configure(api_key=os.environ.get("GEMINI_API_KEY"))
+
+def generate_summary(data_frame):
+    model = genai.GenerativeModel('gemini-2.5-flash')
+    prompt = f"""
+    以下の経済データに基づいて、主要なトレンドと洞察をまとめた簡潔な要約を生成してください。
+    データは以下の通りです：
+    {data_frame.to_string()}
+    
+    要約は、一般の読者にも理解しやすいように、専門用語を避け、約200文字程度で記述してください。
+    """
+    response = model.generate_content(prompt)
+    return response.text
+
 
