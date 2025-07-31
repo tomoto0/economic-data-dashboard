@@ -24,4 +24,4 @@ def generate_summary(data_frame):
     return response.text
 
 def update_dashboard():
-
+    pass

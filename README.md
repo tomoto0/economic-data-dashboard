@@ -36,3 +36,9 @@ USA, CHN, JPN, DEU, GBR, FRA, IND, ITA, BRA, CAN
 
 ## ライセンス
 MIT License
+
+
+## LLMモデル
+このダッシュボードでは、経済データの要約生成にGoogle Gemini APIの`gemini-2.5-flash`モデルを使用しています。これにより、複雑な経済データを簡潔かつ分かりやすく解説し、ユーザーに深い洞察を提供します。
+
+
