@@ -7,7 +7,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap");
         body { font-family: 'Inter', sans-serif; }
         .gradient-bg { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
         .card-hover { transition: all 0.3s ease; }
@@ -110,28 +110,47 @@
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">表示指標</label>
                     <select id="indicatorSelect" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                        <option value="gdp">GDP (兆USD)</option>
-                        <option value="population">人口 (億人)</option>
-                        <option value="inflation">インフレ率 (%)</option>
-                        <option value="unemployment">失業率 (%)</option>
-                        <option value="fdi">外国直接投資 (億USD)</option>
-                        <option value="reserves">外貨準備高 (兆USD)</option>
+                        <option value="GDP (current US$)">GDP (current US$)</option>
+                        <option value="Population, total">人口 (total)</option>
+                        <option value="GDP growth (annual %)">GDP成長率 (annual %)</option>
+                        <option value="Inflation, consumer prices (annual %)">インフレ率 (annual %)</option>
+                        <option value="Unemployment, total (% of total labor force)">失業率 (% of total labor force)</option>
+                        <option value="Foreign direct investment, net inflows (BoP, current US$)">外国直接投資 (current US$)</option>
+                        <option value="Total reserves (includes gold, current US$)">外貨準備高 (current US$)</option>
+                        <option value="Exports of goods and services (% of GDP)">輸出 (% of GDP)</option>
+                        <option value="Imports of goods and services (% of GDP)">輸入 (% of GDP)</option>
+                        <option value="Central government debt, total (% of GDP)">政府債務 (% of GDP)</option>
+                        <option value="Military expenditure (% of GDP)">軍事費 (% of GDP)</option>
+                        <option value="Current health expenditure (% of GDP)">医療費 (% of GDP)</option>
+                        <option value="Government expenditure on education, total (% of GDP)">教育支出 (% of GDP)</option>
+                        <option value="Access to electricity (% of population)">電力アクセス (% of population)</option>
+                        <option value="Ease of doing business score">ビジネスのしやすさスコア</option>
+                        <option value="CO2 emissions (kt)">CO2排出量 (kt)</option>
                     </select>
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">表示国 (最大5カ国)</label>
-                    <div class="flex flex-wrap gap-2" id="countryButtons">
-                        <!-- 国ボタンはJavaScriptで生成 -->
-                    </div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">表示国</label>
+                    <select id="countrySelect" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        <option value="US">USA</option>
+                        <option value="CN">CHN</option>
+                        <option value="JP">JPN</option>
+                        <option value="DE">DEU</option>
+                        <option value="GB">GBR</option>
+                        <option value="FR">FRA</option>
+                        <option value="IN">IND</option>
+                        <option value="IT">ITA</option>
+                        <option value="BR">BRA</option>
+                        <option value="CA">CAN</option>
+                    </select>
                 </div>
             </div>
         </div>
 
         <!-- メインチャート -->
         <div class="bg-white rounded-xl shadow-md p-6 mb-8">
-            <h2 class="text-xl font-semibold text-gray-900 mb-4">時系列推移 (2015-2024)</h2>
+            <h2 class="text-xl font-semibold text-gray-900 mb-4" id="chartTitle"></h2>
             <div class="relative h-96">
-                <canvas id="mainChart"></canvas>
+                <iframe id="chartFrame" src="" frameborder="0" class="w-full h-full"></iframe>
             </div>
         </div>
 
@@ -163,126 +182,84 @@
     </div>
 
     <script>
-        // 初期化
         document.addEventListener('DOMContentLoaded', function() {
-            // 最終更新日を設定
-            document.getElementById('lastUpdate').textContent = '2025/06/23';
-            
-            // サンプルデータの生成
-            const countries = ['USA', 'CHN', 'JPN', 'DEU', 'GBR', 'FRA', 'IND', 'ITA', 'BRA', 'CAN'];
-            const selectedCountries = ['USA', 'CHN', 'JPN', 'DEU', 'GBR'];
-            let currentIndicator = 'gdp';
-            
-            // 国ボタンの生成
-            const countryButtonsContainer = document.getElementById('countryButtons');
-            countries.forEach(country => {
-                const button = document.createElement('button');
-                button.textContent = country;
-                button.className = selectedCountries.includes(country) 
-                    ? 'px-3 py-1 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors'
-                    : 'px-3 py-1 bg-gray-200 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-300 transition-colors';
-                button.onclick = () => toggleCountry(country);
-                countryButtonsContainer.appendChild(button);
-            });
-            
-            // チャートの初期化
-            const ctx = document.getElementById('mainChart').getContext('2d');
-            const chart = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: ['2015', '2016', '2017', '2018', '2019', '2020', '2021', '2022', '2023', '2024'],
-                    datasets: generateChartData()
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            position: 'top',
-                        },
-                        title: {
-                            display: true,
-                            text: 'GDP (兆USD) - 時系列推移'
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true
-                        }
-                    }
-                }
-            });
-            
-            // サンプルデータ生成関数
-            function generateChartData() {
-                const colors = ['#3B82F6', '#EF4444', '#10B981', '#F59E0B', '#8B5CF6'];
-                return selectedCountries.map((country, index) => ({
-                    label: country,
-                    data: Array.from({length: 10}, () => Math.random() * 20 + 5),
-                    borderColor: colors[index],
-                    backgroundColor: colors[index] + '20',
-                    tension: 0.1
-                }));
-            }
-            
-            // 国の選択切り替え
-            function toggleCountry(country) {
-                const index = selectedCountries.indexOf(country);
-                if (index > -1) {
-                    selectedCountries.splice(index, 1);
-                } else if (selectedCountries.length < 5) {
-                    selectedCountries.push(country);
-                }
-                updateCountryButtons();
-                updateChart();
-            }
-            
-            // 国ボタンの更新
-            function updateCountryButtons() {
-                const buttons = countryButtonsContainer.children;
-                for (let i = 0; i < buttons.length; i++) {
-                    const button = buttons[i];
-                    const country = button.textContent;
-                    button.className = selectedCountries.includes(country)
-                        ? 'px-3 py-1 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors'
-                        : 'px-3 py-1 bg-gray-200 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-300 transition-colors';
-                }
-            }
-            
-            // チャートの更新
+            const indicatorSelect = document.getElementById('indicatorSelect');
+            const countrySelect = document.getElementById('countrySelect');
+            const chartFrame = document.getElementById('chartFrame');
+            const chartTitle = document.getElementById('chartTitle');
+            const lastUpdateSpan = document.getElementById('lastUpdate');
+
+            const indicatorsMap = {
+                "GDP (current US$)": "GDP_current_US$",
+                "Population, total": "Population_total",
+                "GDP growth (annual %)": "GDP_growth_annual_",
+                "Inflation, consumer prices (annual %)": "Inflation_consumer_prices_annual_",
+                "Unemployment, total (% of total labor force)": "Unemployment_total_of_total_labor_force",
+                "Foreign direct investment, net inflows (BoP, current US$)": "Foreign_direct_investment_net_inflows_BoP_current_US$",
+                "Total reserves (includes gold, current US$)": "Total_reserves_includes_gold_current_US$",
+                "Exports of goods and services (% of GDP)": "Exports_of_goods_and_services_of_GDP",
+                "Imports of goods and services (% of GDP)": "Imports_of_goods_and_services_of_GDP",
+                "Central government debt, total (% of GDP)": "Central_government_debt_total_of_GDP",
+                "Military expenditure (% of GDP)": "Military_expenditure_of_GDP",
+                "Current health expenditure (% of GDP)": "Current_health_expenditure_of_GDP",
+                "Government expenditure on education, total (% of GDP)": "Government_expenditure_on_education_total_of_GDP",
+                "Access to electricity (% of population)": "Access_to_electricity_of_population",
+                "Ease of doing business score": "Ease_of_doing_business_score",
+                "CO2 emissions (kt)": "CO2_emissions_kt"
+            };
+
+            const countryNames = {
+                "US": "USA",
+                "CN": "CHN",
+                "JP": "JPN",
+                "DE": "DEU",
+                "GB": "GBR",
+                "FR": "FRA",
+                "IN": "IND",
+                "IT": "ITA",
+                "BR": "BRA",
+                "CA": "CAN"
+            };
+
             function updateChart() {
-                chart.data.datasets = generateChartData();
-                chart.update();
+                const selectedIndicator = indicatorSelect.value;
+                const selectedCountry = countrySelect.value;
+                const indicatorFileName = indicatorsMap[selectedIndicator];
+                const countryFileName = selectedCountry;
+
+                if (indicatorFileName && countryFileName) {
+                    const chartPath = `./docs/${indicatorFileName}_Over_Time_${countryFileName}.html`;
+                    chartFrame.src = chartPath;
+                    chartTitle.textContent = `${selectedIndicator} - ${countryNames[selectedCountry]}`; 
+                } else {
+                    chartFrame.src = '';
+                    chartTitle.textContent = 'グラフを選択してください';
+                }
             }
-            
-            // 指標選択の変更
-            document.getElementById('indicatorSelect').addEventListener('change', function(e) {
-                currentIndicator = e.target.value;
-                updateChart();
-                
-                // チャートタイトルの更新
-                const titles = {
-                    gdp: 'GDP (兆USD) - 時系列推移',
-                    population: '人口 (億人) - 時系列推移',
-                    inflation: 'インフレ率 (%) - 時系列推移',
-                    unemployment: '失業率 (%) - 時系列推移',
-                    fdi: '外国直接投資 (億USD) - 時系列推移',
-                    reserves: '外貨準備高 (兆USD) - 時系列推移'
-                };
-                chart.options.plugins.title.text = titles[currentIndicator];
-                chart.update();
-            });
-            
-            // ダークモード切り替え（簡易版）
+
+            // Load last update info
+            fetch('data_update_info.json')
+                .then(response => response.json())
+                .then(data => {
+                    const date = new Date(data.last_updated);
+                    lastUpdateSpan.textContent = date.toLocaleString('ja-JP');
+                })
+                .catch(error => console.error('Error loading update info:', error));
+
+            indicatorSelect.addEventListener('change', updateChart);
+            countrySelect.addEventListener('change', updateChart);
+
+            // Initial chart load
+            updateChart();
+
+            // Dark mode toggle (simplified)
             document.getElementById('darkModeToggle').addEventListener('click', function() {
                 document.body.classList.toggle('dark');
-                // 実際のダークモード実装はより複雑になります
+                // Actual dark mode implementation would be more complex
             });
-            
-            // グローバル関数として定義
-            window.toggleCountry = toggleCountry;
         });
     </script>
 </body>
 </html>
+
 

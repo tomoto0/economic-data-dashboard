@@ -19,10 +19,19 @@ INDICATORS = {
     "FP.CPI.TOTL.ZG": "Inflation, consumer prices (annual %)",
     "SL.UEM.TOTL.ZS": "Unemployment, total (% of total labor force)",
     "BX.KLT.DINV.CD.WD": "Foreign direct investment, net inflows (BoP, current US$)",
-    "FI.RES.TOTL.CD": "Total reserves (includes gold, current US$)"
+    "FI.RES.TOTL.CD": "Total reserves (includes gold, current US$)",
+    "NE.EXP.GNFS.ZS": "Exports of goods and services (% of GDP)",
+    "NE.IMP.GNFS.ZS": "Imports of goods and services (% of GDP)",
+    "GC.DPT.TOTL.GD.ZS": "Central government debt, total (% of GDP)",
+    "MS.MIL.XPND.GD.ZS": "Military expenditure (% of GDP)",
+    "SH.XPD.CHEX.GD.ZS": "Current health expenditure (% of GDP)",
+    "SE.XPD.TOTL.GD.ZS": "Government expenditure on education, total (% of GDP)",
+    "EG.ELC.ACCS.ZS": "Access to electricity (% of population)",
+    "IC.BUS.EASE.XQ": "Ease of doing business score",
+    "EN.ATM.CO2E.KT": "CO2 emissions (kt)"
 }
 
-def fetch_indicator_data(indicator_code, countries, start_year=2015, end_year=2024):
+def fetch_indicator_data(indicator_code, countries, start_year=2000, end_year=datetime.now().year):
     """
     指定された指標のデータを取得
     """
@@ -87,25 +96,25 @@ def process_data():
     # ピボットテーブルに変換（既存のCSV形式に合わせる）
     pivot_data = []
     
-    for country_id in df['CountryID'].unique():
-        country_data = df[df['CountryID'] == country_id]
-        country_name = country_data['CountryName'].iloc[0]
+    for country_id in df["CountryID"].unique():
+        country_data = df[df["CountryID"] == country_id]
+        country_name = country_data["CountryName"].iloc[0]
         
         row = {
-            'CountryID': country_id,
-            'CountryName': country_name
+            "CountryID": country_id,
+            "CountryName": country_name
         }
         
         # 各指標と年の組み合わせでカラムを作成
         for indicator_code, indicator_name in INDICATORS.items():
-            indicator_data = country_data[country_data['IndicatorCode'] == indicator_code]
+            indicator_data = country_data[country_data["IndicatorCode"] == indicator_code]
             
-            for year in range(2015, 2025):
-                year_data = indicator_data[indicator_data['Year'] == str(year)]
+            for year in range(2000, datetime.now().year + 1):
+                year_data = indicator_data[indicator_data["Year"] == str(year)]
                 column_name = f"{indicator_name}_{year}"
                 
                 if not year_data.empty:
-                    row[column_name] = year_data['Value'].iloc[0]
+                    row[column_name] = year_data["Value"].iloc[0]
                 else:
                     row[column_name] = None
         
@@ -113,7 +122,7 @@ def process_data():
     
     # CSVファイルに保存
     pivot_df = pd.DataFrame(pivot_data)
-    pivot_df.to_csv('economic_data.csv', index=False)
+    pivot_df.to_csv("economic_data.csv", index=False)
     
     print(f"Data saved to economic_data.csv")
     print(f"Retrieved data for {len(pivot_df)} countries")
@@ -125,11 +134,13 @@ def process_data():
         "indicators_count": len(INDICATORS)
     }
     
-    with open('data_update_info.json', 'w') as f:
+    with open("data_update_info.json", "w") as f:
         json.dump(update_info, f, indent=2)
     
     print("Data fetch completed successfully!")
 
 if __name__ == "__main__":
     process_data()
+
+
 
