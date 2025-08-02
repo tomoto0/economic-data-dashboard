@@ -1,18 +1,29 @@
-name: Update Economic Data Dashboard
+name: Update Data and Deploy to GitHub Pages
 
 on:
+  push:
+    branches:
+      - main
   schedule:
     # 毎日15:00 JST (06:00 UTC) に実行
     - cron: '0 6 * * *'
   workflow_dispatch: # 手動実行も可能
 
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
 jobs:
-  update-dashboard:
+  update-and-deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      pages: write
-      id-token: write
     
     steps:
     - name: Checkout repository
@@ -38,6 +49,12 @@ jobs:
       run: |
         python scripts/update_dashboard.py
     
+    - name: Copy files to root for GitHub Pages
+      run: |
+        cp docs/modern-dashboard-simple.html ./
+        cp docs/index.html ./
+        cp -r docs ./
+    
     - name: Commit and push changes
       run: |
         git config --local user.email "action@github.com"
@@ -50,11 +67,15 @@ jobs:
           git push
         fi
     
-    - name: Deploy to GitHub Pages
-      uses: peaceiris/actions-gh-pages@v3
+    - name: Setup Pages
+      uses: actions/configure-pages@v5
+    
+    - name: Upload artifact
+      uses: actions/upload-pages-artifact@v3
       with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./docs
-        publish_branch: gh-pages
-        force_orphan: true
+        path: '.'
+    
+    - name: Deploy to GitHub Pages
+      id: deployment
+      uses: actions/deploy-pages@v4
 

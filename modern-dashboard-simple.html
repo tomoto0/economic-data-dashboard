@@ -228,7 +228,7 @@
                 const countryFileName = selectedCountry;
 
                 if (indicatorFileName && countryFileName) {
-                    const chartPath = `./docs/${indicatorFileName}_Over_Time_${countryFileName}.html`;
+                    const chartPath = `docs/${indicatorFileName}_Over_Time_${countryFileName}.html`;
                     chartFrame.src = chartPath;
                     chartTitle.textContent = `${selectedIndicator} - ${countryNames[selectedCountry]}`; 
                 } else {
