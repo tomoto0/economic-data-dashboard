@@ -49,6 +49,9 @@ jobs:
       run: |
         python scripts/update_dashboard.py
     
+    - name: Update README.md last updated time
+      run: |
+        python scripts/update_readme_last_updated.py
 
     
     - name: Commit and push changes
