@@ -51,9 +51,8 @@ jobs:
     
     - name: Copy files to root for GitHub Pages
       run: |
-        cp docs/modern-dashboard-simple.html ./
-        cp docs/index.html ./
-        cp -r docs ./
+        cp docs/modern-dashboard-simple.html ./modern-dashboard-simple.html
+        cp docs/index.html ./index.html
     
     - name: Commit and push changes
       run: |
