@@ -49,10 +49,7 @@ jobs:
       run: |
         python scripts/update_dashboard.py
     
-    - name: Copy files to root for GitHub Pages
-      run: |
-        cp docs/modern-dashboard-simple.html ./modern-dashboard-simple.html
-        cp docs/index.html ./index.html
+
     
     - name: Commit and push changes
       run: |
@@ -72,7 +69,7 @@ jobs:
     - name: Upload artifact
       uses: actions/upload-pages-artifact@v3.0.1
       with:
-        path: '.'
+        path: 'docs'
     
     - name: Deploy to GitHub Pages
       id: deployment
