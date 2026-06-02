@@ -5,6 +5,9 @@
 
 ## デプロイ先
 このダッシュボードはGitHub Pagesにデプロイされており、以下のURLからアクセスできます。
+
+[https://dashboard-econ.manus.space](https://dashboard-econ.manus.space)
+
 [https://tomoto0.github.io/economic-data-dashboard/](https://tomoto0.github.io/economic-data-dashboard/)
 
 ## 特徴
