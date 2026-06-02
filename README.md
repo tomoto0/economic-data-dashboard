@@ -4,7 +4,7 @@
 世界銀行オープンデータを活用した、モダンでインタラクティブな経済データダッシュボードです。各経済指標を国別に比較し、時系列での推移を動的に表示できます。
 
 ## デプロイ先
-このダッシュボードはGitHub Pagesにデプロイされており、以下のURLからアクセスできます。
+このダッシュボードはManus PlatformとGitHub Pagesにデプロイされており、以下のURLからアクセスできます。
 
 [https://dashboard-econ.manus.space](https://dashboard-econ.manus.space)
 
